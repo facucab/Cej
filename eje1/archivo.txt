@@ -1,0 +1,80 @@
+#include<stdio.h>
+#include<string.h>
+typedef struct {
+	int cod;
+	char desc[30];
+	char gen;
+	int cant;
+}anio2023;
+typedef struct {
+	int zona;
+	int sector;
+	int ncasa;
+	char nombre[30];
+	int codJ;
+} pedidos;
+//funcion buscar:
+int buscar(anio2023 aux[], int cant, int e){
+	int pos=-1;
+	int i=0;
+	while(pos==-1 && i<cant){
+		if(aux[i].cod== e){
+			pos=i;
+		}
+		else{
+			i++;
+		}
+	}
+	return pos;
+}
+int main(){
+	int x=0,mayor,pru2,z=0;
+	float pru;
+	anio2023 an;
+	anio2023 aux[6];
+	pedidos p;
+	FILE * ped , *anio;
+	//LLEVAR A MEMORIA EL ARCHIVO PEDIDOS
+	ped= fopen("ANIO2023.dat", "rb");
+	if(ped==NULL){
+		printf("error de archivo");
+	}
+	fread(&an, sizeof(an),1,ped);
+	while(!feof(ped)){
+		aux[x]=an;
+		fread(&an, sizeof(an),1,ped);
+		x++;
+	}
+	fclose(ped);
+	//
+	anio=fopen("pedidos.dat","rb");
+	fread(&p,sizeof(p),1,anio);
+	while(!feof(anio)){
+		int zonaAUX= p.zona;
+		int cont=0;
+		int f=0, m=0;
+		
+		while(!feof(anio) && zonaAUX== p.zona){
+			//ALGORITMO A)
+			int pos= buscar(aux,6,p.codJ);
+			if(aux[pos].gen== 'F' || aux[pos].gen== 'f'){
+				f++;
+			}
+			else{
+				m++;
+			}
+			cont++;
+			pru2= p.zona;
+			fread(&p, sizeof(p),1,anio);
+		}
+		//ALGORITMO A)
+		pru= (float) f/cont;
+		pru= pru*100;
+		printf("\nEl porcentaje de mujeres en la zona es de %.1f", pru);
+		pru= (float) m/cont;
+		pru= pru*100;
+		printf("\nEl porcentaje de hombres en la zona es de %.1f", pru);
+		printf("\nLa cantidad de juguetes que piedieron es de %d", cont);
+	}
+	printf("\n%d", pru2);
+}
