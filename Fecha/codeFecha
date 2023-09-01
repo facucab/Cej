@@ -1,0 +1,20 @@
+#include <stdio.h>+
+#include <stdlib.h>
+int informarDia(int);
+int nombreDia(int , int , int);
+int main()
+{
+    nombreDia(1,13,2023);
+}
+int informarDia(int num){
+    char Dias[7][24] = {"Sabado", "Domingo", "Lunes", "martes", "miercoles", "jueves" , "viernes" };
+    printf("%s", Dias[num]);
+    return 0 ;
+}
+
+int nombreDia(int d, int m, int a){
+    int formula = (d + ( (m+1)*2.6) + (a % 100) + ( (a %100) / 4 ) + ((2023/100)/4) - 2*(2023/100) ) ;
+    formula = formula % 7;
+    informarDia(formula);
+
+}
